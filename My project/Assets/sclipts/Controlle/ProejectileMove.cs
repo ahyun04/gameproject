@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class ProejectileMove : MonoBehaviour
 {
-    public Vector3 launchDirection;
-
-    private void OnCollisionEnter(Collision collision)
+    public enum PROJECTILETYPE
     {
-        if(collision.gameObject.name == "Wall")
-        {
-            Destroy(this.gameObject);
-        }
-        if (collision.gameObject.name == "Monster")
-        {
-            collision.gameObject.GetComponent<MonsterController>().Damanged(1);
-            Destroy(this.gameObject);
-        }
+        PLAYER,
+        ENEMY
     }
+    public Vector3 launchDirection;
+    public PROJECTILETYPE projectileType = PROJECTILETYPE.PLAYER;
+
+
+    //private void OnCollisionEnter(Collision collision)
+
+ 
+
+   
 
     private void OnTriggerEnter(Collider other)
     {
@@ -25,9 +25,14 @@ public class ProejectileMove : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        if (other.gameObject.tag == "Monster")
+        if (other.gameObject.tag == "Monster" && projectileType == PROJECTILETYPE.PLAYER)
         {
             other.gameObject.GetComponent<MonsterController>().Damanged(1);
+            Destroy(this.gameObject);
+        }
+        if (other.gameObject.tag == "Player" && projectileType == PROJECTILETYPE.ENEMY)
+        {
+            other.gameObject.GetComponent<PlayerController>().Damanged(1);
             Destroy(this.gameObject);
         }
     }
